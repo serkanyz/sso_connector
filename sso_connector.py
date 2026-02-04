@@ -71,7 +71,7 @@ def SSO_Connect(username, password, sso_ip, sso_port, s_type = "terminal_server"
             "port": sso_port,
             "username": username,
             "use_keys": True,
-            "key_file": r"C:\Users\CSOTECH\.ssh\File_RSA",
+            "key_file": r"C:\Users\USER\.ssh\File_RSA",
             "timeout": 10,
             "global_delay_factor": 5,
             "banner_timeout": 10}
@@ -954,5 +954,6 @@ def Run_Command_Timing(command, read_timeout = 5):
     
 **********************************************************************
 '''
+
 
 

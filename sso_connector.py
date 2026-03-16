@@ -71,7 +71,7 @@ def SSO_Connect(username, password, sso_ip, sso_port, s_type = "terminal_server"
             "port": sso_port,
             "username": username,
             "use_keys": True,
-            "key_file": r"C:\Users\USER\.ssh\File_RSA",
+            "key_file": r"C:\Users\CSOTECH\.ssh\Nirvana_Linux_RSA",
             "timeout": 10,
             "global_delay_factor": 5,
             "banner_timeout": 10}
@@ -165,6 +165,7 @@ def get_routers_info_enable(enable_password):
     n = 0
     while True:
         try:
+            prompt = ""
             prompt = Read_Channel()
         except:
             print("No Prompt...")
@@ -187,10 +188,10 @@ def get_routers_info_enable(enable_password):
         print(e)
         print("Check device type 3...")
         
-    print(output)
+    #print(output)
     if output.replace(" ", "") == "" :
         output = get_huawei_info()
-        print(output)
+        #print(output)
     
     return output
 
@@ -210,7 +211,7 @@ def get_alcatel_info():
         print("Check device type 4...")
     return output
 
-def Check_Device_Type(enable_password = ""):
+def Check_Device_Type(enable_password = "NoData"):
     global net_connect
     global device_type
     try:
@@ -270,7 +271,7 @@ def Check_Device_Type(enable_password = ""):
                     device_type = "linux"
                 elif "mediant" in output.lower():
                     device_type = "mediant"
-                elif "zte corporation" in output.lower():
+                elif "zte corporation" in output.lower() or " zte " in output.lower() :
                     device_type = "zte_zxros"
                 elif ("alcatel" in output.lower() or "nokia" in output.lower()) and "timos" in output.lower():
                     device_type = "alcatel_sros"
@@ -431,7 +432,7 @@ def Device_Connect(host, port = 22, mode = "ssh", susername = None, spassword = 
                     continue
                 
                 if len(output) == 0:
-                    print(".1", end=" ")
+                    print(".", end=" ")
                 elif "Type '*' to clear search" in output:
                     net_connect.write_channel("*\r\n")
                     net_connect.write_channel("\r")
@@ -504,7 +505,7 @@ def Device_Connect(host, port = 22, mode = "ssh", susername = None, spassword = 
                     print("Connection could not be established...")
                     return "unsuccessful"
                 else:
-                    print(".2", end=" ")
+                    print(".", end=" ")
                     
                 if n == 100:
                     print(n)
@@ -776,7 +777,7 @@ def Device_Disconnect():
                         print("Disconnect: Disconnected to Device...n")
                     return "disconnected"
                 elif len(output) == 0:
-                    print(".3", end=" ")
+                    print(".", end=" ")
                     if n == 30:
                         SSO_Disconnect()
                         return "disconnected"
@@ -843,6 +844,21 @@ def Read_Channel():
             return "No_Response"
         else:
             n = n + 1
+
+def Read_Just():
+    global net_connect
+    output = ''
+    try:
+        output = net_connect.read_channel()
+        
+        if len(output) > 0:
+            return output
+        else:
+            output = net_connect.find_prompt()
+        
+    except:
+        print("Prompt unreadable...")
+    return output
 
 #=================Run Commands====================================
 
@@ -954,6 +970,4 @@ def Run_Command_Timing(command, read_timeout = 5):
     
 **********************************************************************
 '''
-
-
 
